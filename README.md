@@ -271,6 +271,6 @@ A: By iterating over the in-memory global arrays at runtime and computing counts
 
 ## 👨‍💻 Author
 
-Developed as a 4-credit Engineering Final Year Project in C Language.
+Developed as a 4-credit Engineering First Year Project in C Language.
 
 ---
