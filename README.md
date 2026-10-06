@@ -262,39 +262,7 @@ Patients: 12 active  |  Doctors: 5  |  Emergency Queue: 2  |  Appointments: 18
 
 ---
 
-## 🎓 Viva Questions & Answers
 
-**Q1. What data structure is used for the emergency queue?**  
-A: A min-heap (priority queue). Patients with lower priority numbers (e.g., CRITICAL=1) are extracted first using the `heapifyDown` and `heapifyUp` operations.
-
-**Q2. How is patient data persisted between runs?**  
-A: Binary file I/O using `fwrite`/`fread` with the `Patient` structure. Files are saved to `data/patients.dat` after every write operation.
-
-**Q3. How is the password protected?**  
-A: XOR cipher encryption with key `0x5A` is applied before storing to disk. Password input is hidden using POSIX `termios` to disable echo.
-
-**Q4. What sorting algorithms are used?**  
-A: Merge Sort (O(n log n)) for patient names, Bubble Sort (O(n²)) for age, Insertion Sort (O(n²)) for doctor specializations.
-
-**Q5. How does appointment token generation work?**  
-A: `getNextToken()` scans all existing appointments and returns `maxToken + 1`, ensuring uniqueness across sessions.
-
-**Q6. What is the time complexity of the priority queue operations?**  
-A: Insert: O(log n), Extract-Min: O(log n), due to heap operations.
-
-**Q7. How are multiple source files linked?**  
-A: The Makefile compiles each `.c` to an `.o` object file separately, then the linker combines them with `gcc -o hospital *.o`.
-
-**Q8. How does bed management distinguish ICU from General beds?**  
-A: ICU beds are numbered 1001–1020, General beds 2001–2100. The `BedType` enum and separate arrays (`icuBeds[]`, `genBeds[]`) are used.
-
-**Q9. What happens when 3 login attempts fail?**  
-A: The login function returns 0, the main function exits with status 1, and the event is logged to `activity.log`.
-
-**Q10. How is the statistics dashboard built without a database?**  
-A: By iterating over the in-memory global arrays at runtime and computing counts/sums on the fly before display.
-
----
 
 ## 👨‍💻 Author
 
