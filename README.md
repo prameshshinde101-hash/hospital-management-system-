@@ -104,6 +104,7 @@ mkdir -p data logs backup
 | Password | `admin123` |
 
 > Change the password immediately after first login via **Settings → Change Password**.
+<img width="1470" height="956" alt="Screenshot 2026-10-06 at 9 34 42 PM" src="https://github.com/user-attachments/assets/a8a1defe-8441-44b6-b4c3-97ea7b54fa1e" />
 
 ---
 
@@ -115,11 +116,16 @@ mkdir -p data logs backup
 - Sort by name (Merge Sort) or age (Bubble Sort)
 - Stores: ID, name, age, gender, blood group, disease, contact, address, admitted date
 
+- <img width="1465" height="831" alt="Screenshot 2026-10-06 at 10 07 21 PM" src="https://github.com/user-attachments/assets/b276e754-1242-42b3-9331-77004d4e2e26" />
+
 ### 2. Doctor Management
 - Add/view/search doctors
 - Assign doctor to patient (updates patient record)
 - Toggle availability status
 - Sort by specialization (Insertion Sort)
+
+- <img width="1469" height="830" alt="Screenshot 2026-10-06 at 10 08 05 PM" src="https://github.com/user-attachments/assets/a579828b-b256-494f-a988-9cb2fb9d1a9b" />
+
 
 ### 3. Appointment Management
 - Book appointments with auto-generated token numbers
@@ -127,17 +133,26 @@ mkdir -p data logs backup
 - Cancel or mark complete
 - Filter view: All / Scheduled / Completed / Cancelled
 
+- <img width="1470" height="831" alt="Screenshot 2026-10-06 at 10 08 33 PM" src="https://github.com/user-attachments/assets/d963d163-3248-421e-b6ae-aa3248132f54" />
+
+
 ### 4. Emergency Handling (Priority Queue)
 - Register emergency patients with priority: CRITICAL / HIGH / MEDIUM / LOW
 - Min-heap implementation (lower number = served first)
 - Handle next emergency (dequeue)
 - ASCII visualization of the entire queue
 
+- <img width="1470" height="832" alt="Screenshot 2026-10-06 at 10 08 54 PM" src="https://github.com/user-attachments/assets/8214ffd4-e545-45d5-a3ef-14b9db0f2e8a" />
+
+
 ### 5. Ambulance Management
 - Add ambulances with driver details
 - Dispatch to patients (marks as Dispatched)
 - Release back to fleet
 - Fleet status dashboard
+
+- <img width="1470" height="830" alt="Screenshot 2026-10-06 at 10 09 11 PM" src="https://github.com/user-attachments/assets/fbb0149a-9623-4596-a040-6eac5d0937a0" />
+
 
 ### 6. Bed Management
 - ICU beds: 1001–1020 (₹3000/day)
