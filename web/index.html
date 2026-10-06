@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Hospital Management System</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-grid-bg"></div>
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🏥</div>
+      <div class="login-logo-text">
+        <h1>SmartHospital</h1>
+        <p>Management System</p>
+      </div>
+    </div>
+    <h2 class="login-title">Welcome back</h2>
+    <p class="login-sub">Sign in to access the hospital dashboard</p>
+    <div class="form-group">
+      <label class="form-label" for="login-user">Username</label>
+      <input class="form-input" id="login-user" type="text" placeholder="Enter username" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="login-pass">Password</label>
+      <input class="form-input" id="login-pass" type="password" placeholder="Enter password" autocomplete="current-password"/>
+    </div>
+    <button class="btn-primary" id="login-btn">Sign In →</button>
+    <div class="login-hint">Default: <strong>admin</strong> / <strong>admin123</strong></div>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     APP SHELL
+═══════════════════════════════════════════════════════════ -->
+<div id="app" style="display:none;flex:1">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">🏥</div>
+      <div>
+        <div class="sidebar-brand-name">SmartHospital</div>
+        <div class="sidebar-brand-sub">Admin Panel</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-title">Main</div>
+    <nav>
+      <div class="nav-item" data-page="dashboard"><span class="nav-icon">⊞</span>Dashboard</div>
+    </nav>
+
+    <div class="sidebar-section-title">Modules</div>
+    <nav>
+      <div class="nav-item" data-page="patients">  <span class="nav-icon">👤</span>Patients</div>
+      <div class="nav-item" data-page="doctors">   <span class="nav-icon">🩺</span>Doctors</div>
+      <div class="nav-item" data-page="appointments"><span class="nav-icon">📅</span>Appointments</div>
+      <div class="nav-item" data-page="emergency"> <span class="nav-icon">🚨</span>Emergency<span class="nav-badge" id="nav-emg-count">5</span></div>
+      <div class="nav-item" data-page="ambulance"> <span class="nav-icon">🚑</span>Ambulance</div>
+      <div class="nav-item" data-page="beds">      <span class="nav-icon">🛏</span>Bed Management</div>
+      <div class="nav-item" data-page="billing">   <span class="nav-icon">💰</span>Billing</div>
+    </nav>
+
+    <div class="sidebar-section-title">Analytics</div>
+    <nav>
+      <div class="nav-item" data-page="reports"><span class="nav-icon">📊</span>Reports</div>
+      <div class="nav-item" data-page="logs">   <span class="nav-icon">📋</span>Activity Log</div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">A</div>
+        <div>
+          <div class="sidebar-user-name" id="sidebar-username">admin</div>
+          <div class="sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-sub"  id="topbar-sub"></div>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-clock" id="topbar-clock">--:--:--</div>
+      <button class="topbar-btn danger" id="logout-btn">⏻ Logout</button>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 1: DASHBOARD
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-dashboard">
+
+      <!-- Stat Cards Row 1 -->
+      <div class="stats-grid">
+        <div class="stat-card teal">
+          <div class="stat-icon">👤</div>
+          <div class="stat-value" id="stat-active-patients">—</div>
+          <div class="stat-label">Active Patients</div>
+          <div class="stat-delta up">Total: <span id="stat-total-patients">—</span></div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">🩺</div>
+          <div class="stat-value" id="stat-available-docs">—</div>
+          <div class="stat-label">Available Doctors</div>
+          <div class="stat-delta">Total: <span id="stat-total-docs">—</span></div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value" id="stat-pending-appts">—</div>
+          <div class="stat-label">Scheduled Appointments</div>
+          <div class="stat-delta">Total: <span id="stat-total-appts">—</span></div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon">🚨</div>
+          <div class="stat-value" id="stat-emg-queue">—</div>
+          <div class="stat-label">Emergency Queue</div>
+          <div class="stat-delta">Handled today: <span id="stat-emg-handled">—</span></div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-icon">🛏</div>
+          <div class="stat-value" id="stat-icu-occ">—</div>
+          <div class="stat-label">ICU Beds Occupied</div>
+          <div class="stat-delta">Total ICU: <span id="stat-icu-total">—</span></div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value" style="font-size:20px" id="stat-revenue">—</div>
+          <div class="stat-label">Revenue Collected</div>
+          <div class="stat-delta down">Pending: <span id="stat-pending-rev">—</span></div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Bed Occupancy -->
+        <div class="card">
+          <div class="card-title">🛏 Bed Occupancy</div>
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px" id="bar-icu-label"></div>
+            <div class="chart-bar-track" style="height:14px;margin-bottom:16px"><div class="chart-bar-fill" id="bar-icu" style="background:var(--red);width:0"></div></div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px" id="bar-gen-label"></div>
+            <div class="chart-bar-track" style="height:14px"><div class="chart-bar-fill" id="bar-gen" style="background:var(--teal);width:0"></div></div>
+          </div>
+          <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted)">
+            <span>🚑 Ambulances available: <strong id="stat-amb-avail" class="text-teal">—</strong> / <span id="stat-amb-total">—</span></span>
+          </div>
+        </div>
+
+        <!-- Doctor Workload -->
+        <div class="card">
+          <div class="card-title">🩺 Doctor Workload</div>
+          <div id="doctor-workload"></div>
+        </div>
+
+        <!-- Emergency Preview -->
+        <div class="card">
+          <div class="card-title">🚨 Emergency Queue (Top)</div>
+          <div id="dash-emergency"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-title">📋 Recent Activity</div>
+          <div id="recent-activity"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 2: PATIENTS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-patients">
+      <div class="section-header">
+        <div class="section-title">👤 Patients</div>
+        <div class="section-actions">
+          <button class="btn btn-teal" id="btn-add-patient">+ Add Patient</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input class="search-input" id="patient-search" type="text" placeholder="Search name, ID, disease…"/>
+        <select class="filter-select" id="patient-filter">
+          <option value="all">All Patients</option>
+          <option value="active">Active Only</option>
+          <option value="discharged">Discharged Only</option>
+        </select>
+        <select class="filter-select" id="patient-sort">
+          <option value="id">Sort by ID</option>
+          <option value="name">Sort by Name</option>
+          <option value="age">Sort by Age</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr>
+            <th>ID</th><th>Patient</th><th>Age</th><th>Disease</th>
+            <th>Doctor</th><th>Bed</th><th>Admitted</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="patient-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 3: DOCTORS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-doctors">
+      <div class="section-header">
+        <div class="section-title">🩺 Doctors</div>
+        <div class="section-actions">
+          <button class="btn btn-outline" id="btn-assign-doctor">↔ Assign to Patient</button>
+          <button class="btn btn-teal"    id="btn-add-doctor">+ Add Doctor</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input class="search-input" id="doctor-search" type="text" placeholder="Search name or specialization…"/>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr>
+            <th>ID</th><th>Name</th><th>Specialization</th><th>Experience</th>
+            <th>Phone</th><th>Patients</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="doctor-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 4: APPOINTMENTS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-appointments">
+      <div class="section-header">
+        <div class="section-title">📅 Appointments</div>
+        <div class="section-actions">
+          <button class="btn btn-teal" id="btn-book-appt">+ Book Appointment</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select class="filter-select" id="appt-filter">
+          <option value="all">All</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr>
+            <th>Token</th><th>Patient</th><th>Doctor</th><th>Date</th>
+            <th>Time</th><th>Status</th><th>Notes</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="appt-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 5: EMERGENCY
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-emergency">
+      <div class="section-header">
+        <div class="section-title">🚨 Emergency Queue</div>
+        <div class="section-actions">
+          <span class="topbar-clock" id="emg-queue-count">0 in queue</span>
+          <button class="btn btn-teal" id="btn-add-emergency">+ Register Emergency</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em">Priority Order (Min-Heap)</div>
+          <div class="queue-visual" id="emergency-queue"></div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title">Priority Distribution</div>
+            <div id="emg-dist"></div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-title">Priority Guide</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+              <div class="flex items-center gap-8"><span class="badge priority-critical">CRITICAL</span> Cardiac arrest, coma, trauma</div>
+              <div class="flex items-center gap-8"><span class="badge priority-high">HIGH</span> Severe pain, high fever</div>
+              <div class="flex items-center gap-8"><span class="badge priority-medium">MEDIUM</span> Moderate pain, stable</div>
+              <div class="flex items-center gap-8"><span class="badge priority-low">LOW</span> Minor injuries</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 6: AMBULANCE
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-ambulance">
+      <div class="section-header">
+        <div class="section-title">🚑 Ambulance Fleet</div>
+        <div class="section-actions">
+          <button class="btn btn-teal" id="btn-add-ambulance">+ Add Ambulance</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+        <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-value" id="amb-avail-count">—</div><div class="stat-label">Available</div></div>
+        <div class="stat-card red">  <div class="stat-icon">🚑</div><div class="stat-value" id="amb-disp-count">—</div> <div class="stat-label">Dispatched</div></div>
+        <div class="stat-card yellow"><div class="stat-icon">🔧</div><div class="stat-value" id="amb-maint-count">—</div><div class="stat-label">Maintenance</div></div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr>
+            <th>ID</th><th>Vehicle No.</th><th>Driver</th><th>Phone</th>
+            <th>Status</th><th>Patient ID</th><th>Trips</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="amb-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 7: BEDS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-beds">
+      <div class="section-header">
+        <div class="section-title">🛏 Bed Management</div>
+        <div class="section-actions">
+          <button class="btn btn-teal"    id="btn-bed-icu">ICU Beds</button>
+          <button class="btn btn-outline" id="btn-bed-gen">General Ward</button>
+          <button class="btn btn-teal"    id="btn-alloc-bed">+ Allocate Bed</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+        <div class="card" style="text-align:center"><div class="stat-value text-red"   id="bed-occ-count">—</div><div class="stat-label">Occupied</div></div>
+        <div class="card" style="text-align:center"><div class="stat-value text-green" id="bed-free-count">—</div><div class="stat-label">Available</div></div>
+        <div class="card" style="text-align:center"><div class="stat-value text-teal"  id="bed-total-count">—</div><div class="stat-label">Total</div></div>
+        <div class="card" style="text-align:center">
+          <div class="stat-value" id="bed-occ-pct">—</div>
+          <div class="stat-label">Occupancy</div>
+          <div class="chart-bar-track" style="margin-top:8px;height:8px"><div class="chart-bar-fill" id="bed-occ-bar" style="width:0;background:var(--teal)"></div></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;font-size:12px;color:var(--text-secondary)">
+        <div class="flex items-center gap-8"><div style="width:14px;height:14px;border-radius:3px;background:var(--green-pale);border:1px solid rgba(48,217,123,.3)"></div> Available</div>
+        <div class="flex items-center gap-8"><div style="width:14px;height:14px;border-radius:3px;background:var(--red-pale);border:1px solid rgba(255,76,106,.3)"></div> Occupied (click to release)</div>
+      </div>
+      <div class="bed-grid" id="bed-grid"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 8: BILLING
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-billing">
+      <div class="section-header">
+        <div class="section-title">💰 Billing System</div>
+        <div class="section-actions">
+          <button class="btn btn-teal" id="btn-gen-bill">+ Generate Bill</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select class="filter-select" id="bill-filter">
+          <option value="all">All Bills</option>
+          <option value="Pending">Pending</option>
+          <option value="Partial">Partial</option>
+          <option value="Paid">Paid</option>
+        </select>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead><tr>
+            <th>Bill ID</th><th>Patient</th><th>Date</th><th>Total</th>
+            <th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="bill-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 9: REPORTS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-reports">
+      <div class="section-header">
+        <div class="section-title">📊 Reports & Analytics</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div class="card mb-20">
+            <div class="card-title">👤 Patient Report</div>
+            <div id="rpt-patient-body"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🚨 Emergency Report</div>
+            <div id="rpt-emergency-body"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb-20">
+            <div class="card-title">💰 Billing Report</div>
+            <div id="rpt-billing-body"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🩺 Doctor Report</div>
+            <div id="rpt-doctor-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PAGE 10: ACTIVITY LOG (LINKED LIST)
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-content" id="page-logs">
+      <div class="section-header">
+        <div class="section-title">📋 Activity Log <span style="font-size:13px;font-family:var(--font-mono);color:var(--text-muted)" id="log-count"></span></div>
+        <div class="section-actions">
+          <input class="search-input" id="log-search" type="text" placeholder="Search logs…" style="width:200px"/>
+          <button class="btn btn-outline" id="btn-clear-log-search">Clear</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+        <div class="table-wrapper" style="padding:20px">
+          <div id="log-list"></div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title">Add Manual Entry</div>
+            <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Linked list insert at tail — O(1)</p>
+            <textarea class="form-input-m" id="log-manual-entry" rows="3" placeholder="Enter log message…" style="resize:none;margin-bottom:12px"></textarea>
+            <button class="btn btn-teal w-full" id="btn-add-log">Insert to Linked List</button>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-title">Linked List Info</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.8">
+              <div>📌 <strong>Structure:</strong> Singly linked list</div>
+              <div>📌 <strong>Insert:</strong> O(1) at tail</div>
+              <div>📌 <strong>Delete:</strong> O(1) at head</div>
+              <div>📌 <strong>Search:</strong> O(n) linear</div>
+              <div>📌 <strong>Traverse:</strong> Forward + Recursive reverse</div>
+              <div>📌 <strong>Bounded:</strong> Max 200 nodes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /app -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     TOAST CONTAINER
+═══════════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════════════════ -->
+
+<!-- View Patient -->
+<div class="modal-overlay" id="modal-view-patient">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Patient Details</div>
+      <button class="modal-close" data-close-modal="modal-view-patient">✕</button>
+    </div>
+    <div class="modal-body" id="view-patient-content"></div>
+    <div class="modal-footer"><button class="btn btn-outline" data-close-modal="modal-view-patient">Close</button></div>
+  </div>
+</div>
+
+<!-- Add Patient -->
+<div class="modal-overlay" id="modal-add-patient">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Patient</div>
+      <button class="modal-close" data-close-modal="modal-add-patient">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Full Name *</label><input class="form-input-m" id="ap-name" placeholder="Patient full name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Age *</label><input class="form-input-m" id="ap-age" type="number" min="1" max="120" placeholder="Age"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Gender</label>
+          <select class="form-select-m" id="ap-gender"><option value="M">Male</option><option value="F">Female</option><option value="O">Other</option></select></div>
+        <div class="form-group-m"><label class="form-label-m">Blood Group *</label><input class="form-input-m" id="ap-blood" placeholder="e.g. A+, O-"/></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Disease / Diagnosis *</label><input class="form-input-m" id="ap-disease" placeholder="Primary diagnosis"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Phone *</label><input class="form-input-m" id="ap-phone" placeholder="Contact number"/></div>
+        <div class="form-group-m"><label class="form-label-m">Address</label><input class="form-input-m" id="ap-address" placeholder="Residential address"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-add-patient">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-patient">Add Patient</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Patient -->
+<div class="modal-overlay" id="modal-edit-patient">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Patient</div>
+      <button class="modal-close" data-close-modal="modal-edit-patient">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ep-id"/>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Full Name</label><input class="form-input-m" id="ep-name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Age</label><input class="form-input-m" id="ep-age" type="number"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Gender</label>
+          <select class="form-select-m" id="ep-gender"><option value="M">Male</option><option value="F">Female</option><option value="O">Other</option></select></div>
+        <div class="form-group-m"><label class="form-label-m">Blood Group</label><input class="form-input-m" id="ep-blood"/></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Disease</label><input class="form-input-m" id="ep-disease"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Phone</label><input class="form-input-m" id="ep-phone"/></div>
+        <div class="form-group-m"><label class="form-label-m">Address</label><input class="form-input-m" id="ep-address"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-edit-patient">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-edit-patient">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Doctor -->
+<div class="modal-overlay" id="modal-add-doctor">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Doctor</div>
+      <button class="modal-close" data-close-modal="modal-add-doctor">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Full Name *</label><input class="form-input-m" id="ad-name" placeholder="Dr. Full Name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Specialization *</label><input class="form-input-m" id="ad-spec" placeholder="e.g. Cardiology"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Phone *</label><input class="form-input-m" id="ad-phone" placeholder="Contact number"/></div>
+        <div class="form-group-m"><label class="form-label-m">Experience (years)</label><input class="form-input-m" id="ad-exp" type="number" min="0" max="60" placeholder="Years"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-add-doctor">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-doctor">Add Doctor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Doctor -->
+<div class="modal-overlay" id="modal-edit-doctor">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Doctor</div>
+      <button class="modal-close" data-close-modal="modal-edit-doctor">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ed-id"/>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Full Name</label><input class="form-input-m" id="ed-name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Specialization</label><input class="form-input-m" id="ed-spec"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Phone</label><input class="form-input-m" id="ed-phone"/></div>
+        <div class="form-group-m"><label class="form-label-m">Experience (years)</label><input class="form-input-m" id="ed-exp" type="number"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-edit-doctor">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-edit-doctor">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Doctor -->
+<div class="modal-overlay" id="modal-assign-doctor">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Assign Doctor to Patient</div>
+      <button class="modal-close" data-close-modal="modal-assign-doctor">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Patient ID</label><input class="form-input-m" id="assign-pid" type="number" placeholder="e.g. 1001"/></div>
+        <div class="form-group-m"><label class="form-label-m">Doctor ID</label><input class="form-input-m" id="assign-did" type="number" placeholder="e.g. 201"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-assign-doctor">Cancel</button>
+      <button class="btn btn-teal"    id="btn-do-assign">Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- Book Appointment -->
+<div class="modal-overlay" id="modal-book-appt">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Book Appointment</div>
+      <button class="modal-close" data-close-modal="modal-book-appt">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Patient ID *</label><input class="form-input-m" id="ba-pid" type="number" placeholder="e.g. 1001"/></div>
+        <div class="form-group-m"><label class="form-label-m">Doctor ID *</label><input class="form-input-m" id="ba-did" type="number" placeholder="e.g. 201"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Date *</label><input class="form-input-m" id="ba-date" type="date"/></div>
+        <div class="form-group-m"><label class="form-label-m">Time Slot *</label>
+          <select class="form-select-m" id="ba-time">
+            <option value="">Select time…</option>
+            <option>09:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+            <option>12:00 PM</option><option>02:00 PM</option><option>03:00 PM</option>
+            <option>04:00 PM</option><option>05:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Notes</label><input class="form-input-m" id="ba-notes" placeholder="Optional notes"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-book-appt">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-appt">Book Appointment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Emergency -->
+<div class="modal-overlay" id="modal-add-emergency">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" style="color:var(--red)">⚠ Register Emergency</div>
+      <button class="modal-close" data-close-modal="modal-add-emergency">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Patient Name *</label><input class="form-input-m" id="emg-name" placeholder="Full name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Age *</label><input class="form-input-m" id="emg-age" type="number" min="1" max="120"/></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Condition / Injury *</label><input class="form-input-m" id="emg-condition" placeholder="Describe the emergency condition"/></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Priority Level *</label>
+          <select class="form-select-m" id="emg-priority">
+            <option value="">Select priority…</option>
+            <option value="1">1 — CRITICAL (Cardiac arrest, unconscious)</option>
+            <option value="2">2 — HIGH (Severe trauma, fractures)</option>
+            <option value="3">3 — MEDIUM (Moderate pain, stable vitals)</option>
+            <option value="4">4 — LOW (Minor injuries)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-add-emergency">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-emergency">Register Emergency</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Ambulance -->
+<div class="modal-overlay" id="modal-add-ambulance">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Ambulance</div>
+      <button class="modal-close" data-close-modal="modal-add-ambulance">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row single">
+        <div class="form-group-m"><label class="form-label-m">Vehicle Number *</label><input class="form-input-m" id="aa-vehicle" placeholder="e.g. MH12XY9999"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Driver Name *</label><input class="form-input-m" id="aa-driver" placeholder="Driver full name"/></div>
+        <div class="form-group-m"><label class="form-label-m">Driver Phone *</label><input class="form-input-m" id="aa-phone" placeholder="Contact number"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-add-ambulance">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-ambulance">Add Ambulance</button>
+    </div>
+  </div>
+</div>
+
+<!-- Allocate Bed -->
+<div class="modal-overlay" id="modal-alloc-bed">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Allocate Bed</div>
+      <button class="modal-close" data-close-modal="modal-alloc-bed">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Patient ID *</label><input class="form-input-m" id="alloc-pid" type="number" placeholder="e.g. 1001"/></div>
+        <div class="form-group-m"><label class="form-label-m">Bed Type *</label>
+          <select class="form-select-m" id="alloc-type">
+            <option value="ICU">ICU (₹3,000/day) — 1001–1020</option>
+            <option value="General">General Ward (₹800/day) — 2001–2100</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-alloc-bed">Cancel</button>
+      <button class="btn btn-teal"    id="btn-do-alloc-bed">Allocate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Generate Bill -->
+<div class="modal-overlay" id="modal-gen-bill">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Generate Bill</div>
+      <button class="modal-close" data-close-modal="modal-gen-bill">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Patient ID *</label><input class="form-input-m" id="gb-pid" type="number" placeholder="e.g. 1001"/></div>
+        <div class="form-group-m"><label class="form-label-m">Days Admitted</label><input class="form-input-m" id="gb-days" type="number" min="0" placeholder="Number of days"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Emergency Charges (₹)</label><input class="form-input-m" id="gb-emergency" type="number" min="0" placeholder="0"/></div>
+        <div class="form-group-m"><label class="form-label-m">Medicine Charges (₹)</label><input class="form-input-m" id="gb-medicine" type="number" min="0" placeholder="0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-m"><label class="form-label-m">Lab Charges (₹)</label><input class="form-input-m" id="gb-lab" type="number" min="0" placeholder="0"/></div>
+        <div class="form-group-m"><label class="form-label-m">Miscellaneous (₹)</label><input class="form-input-m" id="gb-misc" type="number" min="0" placeholder="0"/></div>
+      </div>
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-size:12px;color:var(--text-secondary);margin-top:8px">
+        💡 Consultation fee is auto-calculated: ₹1,000 (specialist ≥10 yrs) or ₹500 (general). Bed charges = bed rate × days.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" data-close-modal="modal-gen-bill">Cancel</button>
+      <button class="btn btn-teal"    id="btn-save-bill">Generate Bill</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Bill -->
+<div class="modal-overlay" id="modal-view-bill">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Invoice</div>
+      <button class="modal-close" data-close-modal="modal-view-bill">✕</button>
+    </div>
+    <div class="modal-body" id="bill-detail-content"></div>
+    <div class="modal-footer"><button class="btn btn-outline" data-close-modal="modal-view-bill">Close</button></div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
