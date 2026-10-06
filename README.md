@@ -104,7 +104,8 @@ mkdir -p data logs backup
 | Password | `admin123` |
 
 > Change the password immediately after first login via **Settings → Change Password**.
-<img width="1470" height="956" alt="Screenshot 2026-10-06 at 9 34 42 PM" src="https://github.com/user-attachments/assets/a8a1defe-8441-44b6-b4c3-97ea7b54fa1e" />
+
+> <img width="1467" height="832" alt="Screenshot 2026-10-06 at 10 04 53 PM" src="https://github.com/user-attachments/assets/4e071759-db8f-489f-aa25-092f6bb8cd5a" />
 
 ---
 
@@ -160,11 +161,17 @@ mkdir -p data logs backup
 - Visual occupancy display
 - Allocate to patient / release
 
+- <img width="1470" height="833" alt="Screenshot 2026-10-06 at 10 10 52 PM" src="https://github.com/user-attachments/assets/52791b31-3135-4f25-88e7-0224b01d93d3" />
+
+
 ### 7. Billing System
 - Generate itemised bills: consultation + bed + emergency + medicine + lab + misc
 - Auto-compute totals
 - Track partial payments
 - Bill statuses: Pending / Partial / Paid
+
+- <img width="1470" height="830" alt="Screenshot 2026-10-06 at 10 11 13 PM" src="https://github.com/user-attachments/assets/1b943d1d-41f8-4354-8961-1a08033f8995" />
+
 
 ### 8. Login System
 - XOR-encrypted password storage
@@ -179,10 +186,16 @@ mkdir -p data logs backup
 - Emergency report → `data/emergency_report.txt`
 - Billing report → `data/billing_report.txt`
 
+- <img width="1470" height="837" alt="Screenshot 2026-10-06 at 10 11 34 PM" src="https://github.com/user-attachments/assets/487a74c3-bbc9-4049-b120-afe2396447af" />
+
+
 ### 10. Statistics Dashboard
 - Live counts: patients, doctors, appointments, emergency queue
 - Bed occupancy with ASCII bar charts
 - Financial summary: collected vs pending revenue
+
+- <img width="1470" height="831" alt="Screenshot 2026-10-06 at 10 13 08 PM" src="https://github.com/user-attachments/assets/d6c5cb56-fd4b-46cd-96a4-fc5a112580d1" />
+
 
 ### 11. Advanced Features
 - **Activity Log**: every action logged to `logs/activity.log`
