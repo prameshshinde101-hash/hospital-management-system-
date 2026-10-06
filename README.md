@@ -176,8 +176,6 @@ mkdir -p data logs backup
 - **Coloured console UI**: ANSI escape codes
 - **Loading animations**: progress bars on startup
 
----<img width="1470" height="956" alt="Screenshot 2026-10-06 at 10 02 01 PM" src="https://github.com/user-attachments/assets/75003c2f-fc47-4921-9e32-fe141d9845b6" />
-
 
 ## 🏗️ Data Structures Used
 
