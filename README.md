@@ -95,6 +95,7 @@ mkdir -p data logs backup
 ```
 
 ---
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 ## 🔐 Default Login Credentials
 
@@ -172,7 +173,7 @@ mkdir -p data logs backup
 
 - <img width="1470" height="830" alt="Screenshot 2026-10-06 at 10 11 13 PM" src="https://github.com/user-attachments/assets/1b943d1d-41f8-4354-8961-1a08033f8995" />
 
-
+ 
 ### 8. Login System
 - XOR-encrypted password storage
 - Password hidden during entry (termios)
