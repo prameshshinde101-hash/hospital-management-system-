@@ -9,7 +9,7 @@ The **Smart Hospital Management System** is a fully menu-driven, modular hospita
 
 ---
 
-## 🗂️ Project Structure
+## 🗂️ Project Structure. 
 
 ```
 hospital_management/
